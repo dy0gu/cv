@@ -2,6 +2,8 @@ name: "render"
 
 on:
   workflow_call:
+  push:
+    branches: [main]
 
 jobs:
   cv:
@@ -24,3 +26,4 @@ jobs:
         with:
           name: cv
           path: ./out/diogo_simoes_cv.pdf
+          if-no-files-found: error
