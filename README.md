@@ -37,5 +37,5 @@ Cross-platform instructions to render the final document:
 - Render the output:
 
     ```bash
-    rendercv render src/cv.yaml --dont-generate-markdown --dont-generate-html --dont-generate-png --typst-path ./out/cv.typ --pdf-path ./out/cv.pdf
+    rendercv render src/cv.yaml --dont-generate-markdown --dont-generate-html --dont-generate-png --typst-path ../out/cv.typ --pdf-path ../out/cv.pdf
     ```
