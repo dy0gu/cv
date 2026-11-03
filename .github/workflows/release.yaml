@@ -28,8 +28,10 @@ jobs:
 
   render:
     needs: [metadata]
-    if: ${{ needs.metadata.outputs.release-created }}
+    if: ${{ needs.metadata.outputs.release-created == 'true' }}
     uses: ./.github/workflows/render.yaml
+    permissions:
+      contents: read
   upload:
     needs: [metadata, render]
     runs-on: ubuntu-latest
@@ -39,11 +41,15 @@ jobs:
         with:
           name: cv
           path: render
-      - name: Append render artifact to release
+      - name: Append render artifact to draft release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-        run: >
-          gh release upload
-          ${{ needs.metadata.outputs.tag-name }}
-          render/diogo_simoes_cv.pdf
+          TAG_NAME: ${{ needs.metadata.outputs.tag-name }}
+        run: gh release upload "$TAG_NAME" render/diogo_simoes_cv.pdf --clobber
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG_NAME: ${{ needs.metadata.outputs.tag-name }}
+        run: gh release edit "$TAG_NAME" --draft=false
